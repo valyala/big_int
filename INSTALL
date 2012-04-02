@@ -1,0 +1,75 @@
+Installing of BIG_INT PHP package.
+
+There are many ways to build the package. Below you can find details for most
+useful ways of package building:
+
+1. with PHP
+2. with phpize utility
+3. using 'pear install'
+4. under Windows using Microsoft Visual C (.NET or VC6)
+
+-----------------------------------------------------------------------------
+Way 1: Building the package with PHP
+-----------------------------------------------------------------------------
+
+1.  Create ext/big_int folder in the php-source-folder. Copy all files
+    from the package into created folder.
+
+2.  Run
+        ./buildconf
+    to rebuild PHP's configure script.
+
+3.  Compile php with option:
+    --enable-big-int to build bundled into PHP module
+    --enable-big-int=shared to build dinamycally loadable module
+
+-----------------------------------------------------------------------------
+Way 2: Building the package with phpize utility
+-----------------------------------------------------------------------------
+
+1.  Unpack contents of the package.
+
+2.  Run
+        phpize
+    script, which will prepare environment for building BIG_INT package.
+
+3.  Run 
+        ./configure --enable-big-int=shared
+    to generate makefile
+
+4.  Run
+        make
+    to build BIG_INT extension library. It will be placed into
+    ./modules folder.
+
+5.  Run
+        make install
+    to install BIG_INT extension library into PHP
+
+-----------------------------------------------------------------------------
+Way 3: Building the package using 'pear install'
+-----------------------------------------------------------------------------
+
+1.  Run
+        pear install big_int
+    to install the most recent version of BIG_INT package
+
+-----------------------------------------------------------------------------
+Way 4: Building the package under Windows using Microsoft Visual C (.NET or VC6)
+-----------------------------------------------------------------------------
+1.  Create ext/big_int folder in the php-source-folder. Copy all files
+    from the package into created folder.
+
+2.  Copy php4ts.lib (for PHP4) or php5ts.lib (for PHP5) static library from
+    your version of PHP into ext/big_int folder.
+
+3.  Open php_big_int.sln - solution file under MSVC.NET or php_big_int.dsw - 
+    workspace file under MSVC6. Try to build Release_php4 (for PHP4) or Release_php5
+    (for PHP5) configuration.
+
+4.  Copy php_big_int.dll from ext/big_int/Release_php4 or ext/big_int/Release_php5
+    into {extension_dir} folder. Path to {extension_dir} can be found in php.ini
+
+5.  Add line
+        extension=php_big_int.dll
+    into php.ini

@@ -1,0 +1,27 @@
+BIG_INT PHP extension
+
+This extension based on big_int library, which provides a set of functions
+for calculations with arbitrary length integers and bitsets.
+Recent version of big_int library is available at
+http://chat.finalcombat.com/valyala/big_int/
+
+Functions from this package are useful for number theory
+applications. For instance, in two-keys cryptography.
+
+See /tests/RSA.php in the package for example of simple
+implementation of RSA-like cryptoalgorithm.
+See http://pear.php.net/packages/Crypt_RSA/ project for
+more complex implementation of RSA-like crypto, which
+supports key generating, encrypting/decrypting, generating
+and validating of digital sign.
+
+The package has many bitset functions, which allow to work
+with arbitrary length bitsets.
+
+This package is much faster than bundled into PHP BCMath
+and consists almost all functions, which are implemented
+in PHP GMP extension, but it needn't any external libraries.
+
+
+See INSTALL for installation instructions.
+See docs/index.html for implemented functions description.

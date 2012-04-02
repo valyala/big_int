@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "big_int_dll", "big_int_dll.vcproj", "{80905037-AA94-4134-9BD1-0FE0FB3EA5B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calc_dll", "calc_dll.vcproj", "{429ECBEB-3982-4385-88E2-9C2EDF9B191A}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{429ECBEB-3982-4385-88E2-9C2EDF9B191A}.0 = {80905037-AA94-4134-9BD1-0FE0FB3EA5B5}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{80905037-AA94-4134-9BD1-0FE0FB3EA5B5}.Debug.ActiveCfg = Debug|Win32
+		{80905037-AA94-4134-9BD1-0FE0FB3EA5B5}.Debug.Build.0 = Debug|Win32
+		{80905037-AA94-4134-9BD1-0FE0FB3EA5B5}.Release.ActiveCfg = Release|Win32
+		{80905037-AA94-4134-9BD1-0FE0FB3EA5B5}.Release.Build.0 = Release|Win32
+		{429ECBEB-3982-4385-88E2-9C2EDF9B191A}.Debug.ActiveCfg = Debug|Win32
+		{429ECBEB-3982-4385-88E2-9C2EDF9B191A}.Debug.Build.0 = Debug|Win32
+		{429ECBEB-3982-4385-88E2-9C2EDF9B191A}.Release.ActiveCfg = Release|Win32
+		{429ECBEB-3982-4385-88E2-9C2EDF9B191A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

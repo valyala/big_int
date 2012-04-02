@@ -1,0 +1,7 @@
+Installation of Crypt_RSA package from here:
+
+1. Change directory to {big_int_src}/PEAR/Crypt_RSA , where
+   {big_int_src} - root directory of big_int sources.
+
+2. Run
+     pear install package.xml

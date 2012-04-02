@@ -1,0 +1,18 @@
+This is my old project (from 2004-2005 years), which implements arbitrary
+precision integer arithmetic. The code is provided as-is, without
+any modifications since the 2005 year.
+
+It consists of the following parts:
+
+* A C library for arbitrary presision arithmetic. It is located
+  in the libbig_int folder.
+
+* A command-line simple calculator based on the libbig_int. It is located
+  in the libbig_int/projects/calc folder.
+
+* A PHP wrapper for libbig_int library. It is located in the root folder.
+  The wrapper is published at http://pecl.php.net/package/big_int .
+
+* Crypt_RSA - a PoC implementation of RSA encryption and code signing in PHP.
+  It is located in the PEAR folder. The implementation is published
+  at http://pear.php.net/package/Crypt_RSA .

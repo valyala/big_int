@@ -1,0 +1,22 @@
+ARG_ENABLE("big-int", "big_int module", "no");
+
+if (PHP_BIG_INT != "no") {
+    EXTENSION("big_int", "php_big_int.c", PHP_BIG_INT_SHARED, "-Iext/big_int/libbig_int/include -D HAVE_BIG_INT");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "basic_funcs.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "bitset_funcs.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "memory_manager.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "modular_arithmetic.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "number_theory.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "service_funcs.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src", "str_funcs.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "add.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "and.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "andnot.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "cmp.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "div.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "mul.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "or.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "sqr.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "sub.c", "big_int");
+    ADD_SOURCES("ext/big_int/libbig_int/src/low_level_funcs", "xor.c", "big_int");
+}

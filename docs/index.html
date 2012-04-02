@@ -1,0 +1,987 @@
+<!--
+Copyright 2004, 2005 Alexander Valyalkin
+
+These sources is free software. You can redistribute it and/or
+modify it freely. You can use it with any free or commercial
+software.
+
+These sources is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY. Without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+You may contact the author by:
+   e-mail:  valyala@gmail.com
+-->
+<html>
+<head>
+    <title>PHP big_int functions</title>
+
+    <style type="text/css">
+        .block { border: 1px solid; padding: 5px; margin: 10px 0px; background: #bbb; }
+        .item { margin: 20px 10px; padding: 5px; background: #eee; }
+        .func_def { font-weight: bold; }
+        .toc_h1 { font-weight: bold; }
+        .toc { margin: 10px 0px; border: 1px solid; padding: 5px; background: #eee; }
+        .copyright { text-align: center; }
+        .title1 { font-size: 2em; text-align: center; }
+        .title2 { font-size: 1.5em; text-align: center; margin-top: 30px; margin-bottom: 10px; }
+        .link2top { font-size: 0.8em; }
+        .code { font-family: monospace; }
+        a { text-decoration: none; color: #009; }
+        a:hover { background: white; }
+    </style>
+</head>
+<body>
+    <div>
+        <a name="page_top"></a>
+    </div>
+
+    <div class="title1">PHP big_int functions</div>
+
+    <div class="toc">
+        <a href="#service_funcs" class="toc_h1">Service functions</a>:<br/>
+        <a href="#bi_from_str">bi_from_str</a>,
+        <a href="#bi_to_str">bi_to_str</a>,
+        <a href="#bi_base_convert">bi_base_convert</a>,
+        <a href="#bi_serialize">bi_serialize</a>,
+        <a href="#bi_unserialize">bi_unserialize</a>
+    </div>
+    <div class="toc">
+        <a href="#basic_funcs" class="toc_h1">Basic functions</a>:<br/>
+        <a href="#bi_add">bi_add</a>,
+        <a href="#bi_sub">bi_sub</a>,
+        <a href="#bi_mul">bi_mul</a>,
+        <a href="#bi_div">bi_div</a>,
+        <a href="#bi_mod">bi_mod</a>,
+        <a href="#bi_muladd">bi_muladd</a>,
+        <a href="#bi_sqr">bi_sqr</a>,
+        <a href="#bi_abs">bi_abs</a>,
+        <a href="#bi_neg">bi_neg</a>,
+        <a href="#bi_inc">bi_inc</a>,
+        <a href="#bi_dec">bi_dec</a>,
+        <a href="#bi_is_zero">bi_is_zero</a>,
+        <a href="#bi_is_one">bi_is_one</a>,
+        <a href="#bi_sign">bi_sign</a>,
+        <a href="#bi_cmp">bi_cmp</a>,
+        <a href="#bi_cmp_abs">bi_cmp_abs</a>
+    </div>
+    <div class="toc">
+        <a href="#bitset_funcs" class="toc_h1">Bitset functions</a>:<br/>
+        <a href="#bi_or">bi_or</a>,
+        <a href="#bi_and">bi_and</a>,
+        <a href="#bi_xor">bi_xor</a>,
+        <a href="#bi_andnot">bi_andnot</a>,
+        <a href="#bi_bit_len">bi_bit_len</a>,
+        <a href="#bi_bit1_cnt">bi_bit1_cnt</a>,
+        <a href="#bi_lshift">bi_lshift</a>,
+        <a href="#bi_rshift">bi_rshift</a>,
+        <a href="#bi_set_bit">bi_set_bit</a>,
+        <a href="#bi_clr_bit">bi_clr_bit</a>,
+        <a href="#bi_inv_bit">bi_inv_bit</a>,
+        <a href="#bi_test_bit">bi_test_bit</a>,
+        <a href="#bi_scan0_bit">bi_scan0_bit</a>,
+        <a href="#bi_scan1_bit">bi_scan1_bit</a>,
+        <a href="#bi_hamming_distance">bi_hamming_distance</a>,
+        <a href="#bi_subint">bi_subint</a>
+    </div>
+    <div class="toc">
+        <a href="#modular_arithmetic_funcs" class="toc_h1">Modular arithmetic functions</a>:<br/>
+        <a href="#bi_addmod">bi_addmod</a>,
+        <a href="#bi_submod">bi_submod</a>,
+        <a href="#bi_mulmod">bi_mulmod</a>,
+        <a href="#bi_divmod">bi_divmod</a>,
+        <a href="#bi_powmod">bi_powmod</a>,
+        <a href="#bi_factmod">bi_factmod</a>,
+        <a href="#bi_invmod">bi_invmod</a>,
+        <a href="#bi_sqrmod">bi_sqrmod</a>,
+        <a href="#bi_cmpmod">bi_cmpmod</a>
+    </div>
+    <div class="toc">
+        <a href="#other_funcs" class="toc_h1">Other functions</a>:<br/>
+        <a href="#bi_sqrt">bi_sqrt</a>,
+        <a href="#bi_sqrt_rem">bi_sqrt_rem</a>,
+        <a href="#bi_gcd">bi_gcd</a>,
+        <a href="#bi_gcd_extended">bi_gcd_extended</a>,
+        <a href="#bi_is_prime">bi_is_prime</a>,
+        <a href="#bi_next_prime">bi_next_prime</a>,
+        <a href="#bi_div_extended">bi_div_extended</a>,
+        <a href="#bi_rand">bi_rand</a>,
+        <a href="#bi_miller_test">bi_miller_test</a>,
+        <a href="#bi_jacobi">bi_jacobi</a>,
+        <a href="#bi_fact">bi_fact</a>,
+        <a href="#bi_pow">bi_pow</a>,
+        <a href="#bi_info">bi_info</a>
+    </div>
+
+<!-- ########################################################################## -->
+    <div class="title2"><a name="service_funcs"></a>Service functions</div>
+    <div class="block">
+        <div class="item">
+            <a name="bi_from_str"></a>
+            <div class="func_def">
+                big_int bi_from_str(string str [, int base])
+            </div>
+            converts string representation of number <b>str</b> with base <b>base</b>
+            to big_int resource. If <b>base</b> is not set, function assumes that it is
+            equal to 10.<br/>
+
+            <b>base</b> can be from 2 to 36 inclusive.<br/>
+
+            Returns: converted to big_int resource number on success or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_to_str"></a>
+            <div class="func_def">
+                string bi_to_str(big_int num [, int base])
+            </div>
+            converts big_int number <b>num</b> to string representation with
+            base <b>base</b>. If <b>base</b> is not set, function assumes that it is
+            equal to 10.<br/>
+
+            <b>base</b> can be from 2 to 36 inclusive.<br/>
+
+            Returns: converted to string big_int number <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_base_convert"></a>
+            <div class="func_def">
+                string bi_base_convert(string str, int base_from, int base_to)
+            </div>
+            converts string representation of number <b>str</b> with base <b>base_from</b>
+            into string representation with base <b>base_to</b>.<br/>
+
+            <b>base_from</b> and <b>base_to</b> can be from 2 to 36 inclusive.<br/>
+
+            Returns: converted string or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_serialize"></a>
+            <div class="func_def">
+                string bi_serialize(big_int a [, bool is_sign])
+            </div>
+            serializes number <b>a</b> to bytestream.<br/>
+            If <b>is_sign</b> is TRUE, then serialize the sign of <b>a</b> too.
+            Else it will not serialized.
+
+            Returns: serialized value of <b>a</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_unserialize"></a>
+            <div class="func_def">
+                big_int bi_unserialize(string str [, bool is_sign])
+            </div>
+            unserializes number from bytestream <b>str</b>.<br/>
+            If <b>is_sign</b> is TRUE, then unserialize the sign of <b>a</b>.
+            Else it will not unserialized.
+
+            Returns: unserialized number or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+    </div>
+
+<!-- ########################################################################## -->
+    <div class="title2"><a name="basic_funcs"></a>Basic functions</div>
+    <div class="block">
+        <div class="item">
+            <a name="bi_add"></a>
+            <div class="func_def">
+                big_int bi_add(big_int a, big_int b)
+            </div>
+            calculates <b>a</b> + <b>b</b>.<br/>
+
+            Returns: <b>a</b> + <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_sub"></a>
+            <div class="func_def">
+                big_int bi_sub(big_int a, big_int b)
+            </div>
+            calculates <b>a</b> - <b>b</b>.<br/>
+
+            Returns: <b>a</b> - <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_mul"></a>
+            <div class="func_def">
+                big_int bi_mul(big_int a, big_int b)
+            </div>
+            calculates <b>a</b> * <b>b</b>.<br/>
+
+            Returns: <b>a</b> * <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_div"></a>
+            <div class="func_def">
+                big_int bi_div(big_int a, big_int b)
+            </div>
+            calculates integer part of <b>a</b> / <b>b</b>.<br/>
+
+            Returns: integer part of <b>a</b> / <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_mod"></a>
+            <div class="func_def">
+                big_int bi_mod(big_int a, big_int b)
+            </div>
+            calculates <b>a</b> % <b>b</b>.<br/>
+
+            Returns: <b>a</b> % <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_muladd"></a>
+            <div class="func_def">
+                big_int bi_muladd(big_int a, big_int b, big_int c)
+            </div>
+            calculates <b>c</b> + <b>a</b> * <b>b</b>.<br/>
+
+            Returns: <b>c</b> + <b>a</b> * <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_sqr"></a>
+            <div class="func_def">
+                big_int bi_sqr(big_int num)
+            </div>
+            calculates square of <b>num</b>.<br/>
+
+            Returns: sqr(<b>num</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_abs"></a>
+            <div class="func_def">
+                big_int bi_abs(big_int num)
+            </div>
+            calculates abs(<b>num</b>).<br/>
+
+            Returns: abs(<b>num</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_neg"></a>
+            <div class="func_def">
+                big_int bi_neg(big_int num)
+            </div>
+            calculates -(<b>num</b>).<br/>
+
+            Returns: -(<b>num</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_inc"></a>
+            <div class="func_def">
+                big_int bi_inc(big_int num)
+            </div>
+            calculates <b>num</b> + 1.<br/>
+
+            Returns: <b>num</b> + 1 or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_dec"></a>
+            <div class="func_def">
+                big_int bi_dec(big_int num)
+            </div>
+            calculates <b>num</b> - 1.<br/>
+
+            Returns: <b>num</b> - 1 or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_is_zero"></a>
+            <div class="func_def">
+                bool bi_is_zero(big_int num)
+            </div>
+            compares <b>num</b> with zero.<br/>
+
+            Returns: TRUE, if <b>num</b> equals to zero. FALSE otherwise or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_is_one"></a>
+            <div class="func_def">
+                bool bi_is_one(big_int num)
+            </div>
+            compares <b>num</b> with 1.<br/>
+
+            Returns: TRUE, if <b>num</b> equals to 1. FALSE otherwise or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_sign"></a>
+            <div class="func_def">
+                int bi_sign(big_int num)
+            </div>
+            determines the sign of <b>num</b>.<br/>
+
+            Returns:<br/>
+                1, if <b>num</b> > 0<br/>
+                0, if <b>num</b> = 0<br/>
+                -1, if <b>num</b> < 0<br/>
+                
+                or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_cmp"></a>
+            <div class="func_def">
+                int bi_cmp(big_int a, big_int b)
+            </div>
+            compares <b>a</b> with <b>b</b>.<br/>
+
+            Returns:<br/>
+                -1, if <b>a</b> < <b>b</b><br/>
+                0, if <b>a</b> = <b>b</b><br/>
+                1, if <b>a</b> > <b>b</b><br/>
+
+                or NULL on error<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_cmp_abs"></a>
+            <div class="func_def">
+                int bi_cmp_abs(big_int a, big_int b)
+            </div>
+            compares abs(<b>a</b>) with abs(<b>b</b>).<br/>
+
+            Returns:<br/>
+                -1, if abs(<b>a</b>) < abs(<b>b</b>)<br/>
+                0, if abs(<b>a</b>) = abs(<b>b</b>)<br/>
+                1, if abs(<b>a</b>) > abs(<b>b</b>)<br/>
+
+                or NULL on error<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+    </div>
+
+<!-- ########################################################################## -->
+    <div class="title2"><a name="bitset_funcs"></a>Bitset functions</div>
+    <div class="block">
+        <div class="item">
+            <a name="bi_or"></a>
+            <div class="func_def">
+                big_int bi_or(big_int a, big_int b[, int start_pos])
+            </div>
+            calculates bitwise <b>a</b> or <b>b</b>, starting from <b>start_pos</b> bit of number <b>a</b>.<br/>
+
+            Returns: <b>a</b> or <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_and"></a>
+            <div class="func_def">
+                big_int bi_and(big_int a, big_int b[, int start_pos])
+            </div>
+            calculates bitwise <b>a</b> and <b>b</b>, starting from <b>start_pos</b> bit of number <b>a</b>.<br/>
+
+            Returns: <b>a</b> and <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_xor"></a>
+            <div class="func_def">
+                big_int bi_xor(big_int a, big_int b[, int start_pos])
+            </div>
+            calculates bitwise <b>a</b> xor <b>b</b>, starting from <b>start_pos</b> bit of number <b>a</b>.<br/>
+
+            Returns: <b>a</b> xor <b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_andnot"></a>
+            <div class="func_def">
+                big_int bi_andnot(big_int a, big_int b[, int start_pos])
+            </div>
+            calculates bitwise <b>a</b> and !<b>b</b>, starting from <b>start_pos</b> bit of number <b>a</b>.<br/>
+
+            Returns: <b>a</b> and !<b>b</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_bit_len"></a>
+            <div class="func_def">
+                int bi_bit_len(big_int num)
+            </div>
+            counts bit length of <b>num</b>.<br/>
+
+            Returns: bit length of <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_bit1_cnt"></a>
+            <div class="func_def">
+                int bi_bit1_cnt(big_int num)
+            </div>
+            counts 1-bits in the <b>num</b>.<br/>
+
+            Returns: number of 1-bits in the <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_lshift"></a>
+            <div class="func_def">
+                big_int bi_lshift(big_int num, int bits_cnt)
+            </div>
+            shifts number <b>num</b> by <b>bits_cnt</b> bits to the left.<br/>
+
+            Returns: shifted number or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_rshift"></a>
+            <div class="func_def">
+                big_int bi_rshift(big_int num, int bits_cnt)
+            </div>
+            shifts number <b>num</b> by <b>bits_cnt</b> bits to the right.<br/>
+
+            Returns: shifted number or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_set_bit"></a>
+            <div class="func_def">
+                big_int bi_set_bit(big_int num, int bit_pos)
+            </div>
+            sets bit number <b>bit_pos</b> to the 1.<br/>
+
+            Returns: <b>num</b> with bit number <b>bit_pos</b> setted to 1 or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_clr_bit"></a>
+            <div class="func_def">
+                big_int bi_clr_bit(big_int num, int bit_pos)
+            </div>
+            clears bit number <b>bit_pos</b> to the 0.<br/>
+
+            Returns: <b>num</b> with bit number <b>bit_pos</b> cleared to 0 or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_inv_bit"></a>
+            <div class="func_def">
+                big_int bi_inv_bit(big_int num, int bit_pos)
+            </div>
+            inverts bit number <b>bit_pos</b> int the <b>num</b>.<br/>
+
+            Returns: <b>num</b> with inverted bit number <b>bit_pos</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_test_bit"></a>
+            <div class="func_def">
+                int bi_test_bit(big_int num, int bit_pos)
+            </div>
+            determines value of bit number <b>bit_pos</b> in the <b>num</b>.<br/>
+
+            Returns: value of bit number <b>bit_pos</b> in the <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_scan0_bit"></a>
+            <div class="func_def">
+                int bi_scan0_bit(big_int num, int start_pos)
+            </div>
+            determines the position of the next 0-bit after bit number <b>start_pos</b> in the <b>num</b>.<br/>
+
+            Returns: founded next position of the 0-bit or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_scan1_bit"></a>
+            <div class="func_def">
+                int bi_scan1_bit(big_int num, int start_pos)
+            </div>
+            determines the position of the next 1-bit after bit number <b>start_pos</b> in the <b>num</b>.<br/>
+
+            Returns: founded next position of the 1-bit or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_hamming_distance"></a>
+            <div class="func_def">
+                int bi_hamming_distance(big_int a, big_int b)
+            </div>
+            calculates the Hamming distance between <b>a</b> and <b>b</b>.<br/>
+
+            Returns: calculated Hamming distance or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_subint"></a>
+            <div class="func_def">
+                big_int bi_subint(big_int num, int start_pos, int len [, int is_invert])
+            </div>
+            cuts <b>len</b> bits of the number <b>num</b> starting from <b>start_pos</b> bit.<br/>
+            If <b>is_invert</b> is not 0, then invert cutted bits.
+
+            Returns: number, containing of cutted bits or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+    </div>
+
+<!-- ########################################################################## -->
+    <div class="title2"><a name="modular_arithmetic_funcs"></a>Modular arithmetic functions</div>
+    <div class="block">
+        <div class="item">
+            <a name="bi_addmod"></a>
+            <div class="func_def">
+                big_int bi_addmod(big_int a, big_int b, big_int modulus)
+            </div>
+            calculates <b>a</b> + <b>b</b> (mod <b>modulus</b>).<br/>
+
+            Returns: <b>a</b> + <b>b</b> (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_submod"></a>
+            <div class="func_def">
+                big_int bi_submod(big_int a, big_int b, big_int modulus)
+            </div>
+            calculates <b>a</b> - <b>b</b> (mod <b>modulus</b>).<br/>
+
+            Returns: <b>a</b> - <b>b</b> (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_mulmod"></a>
+            <div class="func_def">
+                big_int bi_mulmod(big_int a, big_int b, big_int modulus)
+            </div>
+            calculates <b>a</b> * <b>b</b> (mod <b>modulus</b>).<br/>
+
+            Returns: <b>a</b> * <b>b</b> (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_divmod"></a>
+            <div class="func_def">
+                big_int bi_divmod(big_int a, big_int b, big_int modulus)
+            </div>
+            calculates <b>a</b> / <b>b</b> (mod <b>modulus</b>).<br/>
+
+            Returns: <b>a</b> / <b>b</b> (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_powmod"></a>
+            <div class="func_def">
+                big_int bi_powmod(big_int a, big_int b, big_int modulus)
+            </div>
+            calculates pow(<b>a</b>, <b>b</b>) (mod <b>modulus</b>).<br/>
+
+            Returns: pow(<b>a</b>, <b>b</b>) (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_factmod"></a>
+            <div class="func_def">
+                big_int bi_factmod(big_int num, big_int modulus)
+            </div>
+            calculates <b>num</b>! (mod <b>modulus</b>).<br/>
+
+            Returns: <b>num</b>! (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_absmod"></a>
+            <div class="func_def">
+                big_int bi_absmod(big_int num, big_int modulus)
+            </div>
+            calculates <b>num</b> (mod <b>modulus</b>).<br/>
+
+            Returns: <b>num</b> (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_invmod"></a>
+            <div class="func_def">
+                big_int bi_invmod(big_int num, big_int modulus)
+            </div>
+            calculates pow(<b>num</b>, -1) (mod <b>modulus</b>).<br/>
+
+            Returns: pow(<b>num</b>, -1) (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_sqrmod"></a>
+            <div class="func_def">
+                big_int bi_sqrmod(big_int num, big_int modulus)
+            </div>
+            calculates sqr(<b>num</b>) (mod <b>modulus</b>).<br/>
+
+            Returns: sqr(<b>num</b>) (mod <b>modulus</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_cmpmod"></a>
+            <div class="func_def">
+                int bi_cmpmod(big_int a, big_int b, big_int modulus)
+            </div>
+            compares <b>a</b> with <b>b</b> by modulus <b>modulus</b>.<br/>
+
+            Returns:<br/>
+                -1, if <b>a</b> < <b>b</b> (mod <b>modulus</b>)<br/>
+                0, if <b>a</b> = <b>b</b> (mod <b>modulus</b>)<br/>
+                1, if <b>a</b> > <b>b</b> (mod <b>modulus</b>)<br/>
+
+                or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+    </div>
+
+<!-- ########################################################################## -->
+    <div class="title2"><a name="other_funcs"></a>Other functions</div>
+    <div class="block">
+        <div class="item">
+            <a name="bi_sqrt"></a>
+            <div class="func_def">
+                big_int bi_sqrt(big_int num)
+            </div>
+            calculates integer part of square root of <b>num</b>.<br/>
+
+            Returns: sqrt(<b>num</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_sqrt_rem"></a>
+            <div class="func_def">
+                big_int bi_sqr_rem(big_int num)
+            </div>
+            calculates remainder of square root of <b>num</b>.
+            This is a number <b>x</b>: <b>x</b> = <b>num</b> - sqr(int(sqrt(<b>num</b>)))<br/>
+
+            Returns: remainder of square root of <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_gcd"></a>
+            <div class="func_def">
+                big_int bi_gcd(big_int a, big_int b)
+            </div>
+            calculates greatest common divider (GCD) of <b>a</b> and <b>b</b>.<br/>
+
+            Returns: GCD(<b>a</b>, <b>b</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_gcd_extended"></a>
+            <div class="func_def">
+                array bi_gcd_extended(big_int a, big_int b)
+            </div>
+
+            Returns array(<br/>
+                0 => gcd(<b>a</b>, <b>b</b>),<br/>
+                1 => u,<br/>
+                2 => v,<br/>
+            );<br/>
+
+            Where abs(<b>a</b>) * u + abs(<b>b</b>) * v = gcd(<b>a</b>, <b>b</b>)<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_is_prime"></a>
+            <div class="func_def">
+                int bi_is_prime(big_int num)
+            </div>
+            Primality test of <b>num</b>.<br/>
+
+            Returns:<br/>
+                0, if <b>num</b> is composite<br/>
+                1, if <b>num</b> is pseudoprime<br/>
+                2, if <b>num</b> is proven prime<br/>
+
+                or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_next_prime"></a>
+            <div class="func_def">
+                big_int bi_next_prime(big_int num)
+            </div>
+            finds next strong pseudoprime after <b>num</b>.<br/>
+
+            Returns: next strong pseudoprime after <b>num</b> or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_div_extended"></a>
+            <div class="func_def">
+                array bi_div_extended(big_int a, big_int b)
+            </div>
+            calculates <b>q</b> and <b>r</b>, so <b>a</b> = <b>q</b> * <b>b</b> + <b>r</b>.<br/>
+
+            Returns: array(<b>q</b>, <b>r</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_rand"></a>
+            <div class="func_def">
+                big_int bi_rand(int bits_cnt[, string rand_func_name])
+            </div>
+            generates equidistributed pseudorandom number with length <b>bits_cnt</b> bits.<br/>
+
+            if <b>rand_func_name</b> is set, then use it for generating random number,
+            else use rand() function from standard C library.<br/>
+
+            <i>
+                Note: this function uses only lower byte of value,
+                returned by user function named [function_name].
+                User function must return integer.
+            </i><br/>
+
+            Returns: generated pseudorandom number or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_miller_test"></a>
+            <div class="func_def">
+                int bi_miller_test(big_int a, big_int base)
+            </div>
+            Primality test of <b>a</b> with help of base <b>base</b>.<br/>
+
+            Returns:<br/>
+                0, if <b>a</b> is composite<br/>
+                1, if <b>a</b> is pseudoprime by base <b>base</b><br/>
+
+                or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_jacobi"></a>
+            <div class="func_def">
+                int bi_jacobi(big_int a, big_int b)
+            </div>
+            calculates Jacobi symbol (<b>a</b>|<b>b</b>) .<br/>
+
+            Returns: Jacobi symbol or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_fact"></a>
+            <div class="func_def">
+                big_int bi_fact(int a)
+            </div>
+            calculates factorial of <b>a</b>.<br/>
+
+            Returns: <b>a</b>! or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_pow"></a>
+            <div class="func_def">
+                big_int bi_pow(big_int a, int b)
+            </div>
+            powers <b>a</b> by power <b>b</b>.<br/>
+
+            Returns: pow(<b>a</b>, <b>b</b>) or NULL on error.<br/>
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+
+        <div class="item">
+            <a name="bi_info"></a>
+            <div class="func_def">
+                array bi_info()
+            </div>
+            Returns associative array, containing information, related to big_int extension:<br/>
+            
+            <pre class="code">
+array(
+    'digit_size' => size of big_int word in bits,
+    'ext_version' => version of big_int extension,
+    'lib_version' => version of big_int library version,
+    'ext_build_date' => date of big_int extension building,
+    'lib_build_date' => date of big_int library building,
+);
+            </pre>
+
+            <div>
+                <a class="link2top" href="#page_top">goto top</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright">Copyright: Alexander Valyalkin (<a href="mailto:valyala@gmail.com">valyala@gmail.com</a>)</div>
+</body>
+</html>

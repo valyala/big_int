@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "php_big_int", "php_big_int.vcproj", "{C76B8373-A3CD-4245-A85C-EB6FA6473E25}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Release_php4
+		ConfigName.1 = Release_php5
+		ConfigName.3 = Debug_php4
+		ConfigName.2 = Debug_php5
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Release_php4.ActiveCfg = Release_php4|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Release_php4.Build.0 = Release_php4|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Release_php5.ActiveCfg = Release_php5|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Release_php5.Build.0 = Release_php5|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Debug_php4.ActiveCfg = Debug_php4|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Debug_php4.Build.0 = Debug_php4|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Debug_php5.ActiveCfg = Debug_php5|Win32
+		{C76B8373-A3CD-4245-A85C-EB6FA6473E25}.Debug_php5.Build.0 = Debug_php5|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
